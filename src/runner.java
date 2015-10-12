@@ -47,23 +47,36 @@ public class runner {
 
         Collections.sort(sorted_list);
 
+        String output = "Result: ";
+
         for (int i = 0; i < k; i++){
-            System.out.println(sorted_list.get(i).getTerm() + " " + sorted_list.get(i).getPosting_list_size());
-            //System.out.println(sorted_list.get(sorted_list.size() - 1 - i).getTerm());
-            //System.out.println(sorted_list.get(sorted_list.size() - 1 - i).getPosting_list_size());
+            //System.out.println(sorted_list.get(i).getTerm() + " " + sorted_list.get(i).getPosting_list_size());
+            output += sorted_list.get(i).getTerm() + ", ";
         }
+
+        System.out.println("FUNCTION: getTopK " + k);
+        System.out.println(output);
+
+    }
+
+    public static void getPostings(Map<String, Term_data> index){
 
     }
 
 
     public static void main(String [] args){
 
+        String index_fileName = args[0];
+        String log_fileName = args[1];
+        int k_num = Integer.parseInt(args[2]);
+        String input_fileName = args[3];
+
         Map<String, Term_data> index = new HashMap<>();
 
-
         try{
-            String file_name = "term.idx";
-            FileReader reader = new FileReader(file_name);
+            //String file_name = "term.idx";
+
+            FileReader reader = new FileReader(index_fileName);
             BufferedReader bufferedReader = new BufferedReader(reader);
 
             String line;
@@ -78,12 +91,13 @@ public class runner {
 
         // all terms have been indexed
 
-        get_top_k(index, 10);
+        get_top_k(index, k_num);
+        getPostings(index);
 
         // read sample input
         try{
-            String file_name = "sample_input.txt";
-            FileReader reader = new FileReader(file_name);
+            //String file_name = "sample_input.txt";
+            FileReader reader = new FileReader(input_fileName);
             BufferedReader bufferedReader = new BufferedReader(reader);
 
             String line;
