@@ -14,4 +14,8 @@ public class Term_data{
         return list_size;
     }
 
+    public List<Tuple> getPosting_list(){
+        return posting_list;
+    }
+
 }

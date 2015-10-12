@@ -8,7 +8,7 @@ public class runner {
 
 
     public static void index_term(Map<String, Term_data> index, String line){
-        System.out.println("current line is : " + line);
+        //System.out.println("current line is : " + line);
         String[] line_split = line.split("\\\\");
 
         Term_data term_data;
@@ -59,7 +59,30 @@ public class runner {
 
     }
 
-    public static void getPostings(Map<String, Term_data> index){
+    public static void getPostings(Map<String, Term_data> index, String query_term){
+
+        System.out.println("FUNCTION: getPostings " + query_term);
+
+        Term_data query_results = index.get(query_term);
+        if (query_results.get_Posting_List_size() == 0){
+            System.out.println("term not found");
+            return;
+        }
+
+        List<Tuple> posting_list = query_results.getPosting_list();
+
+        String getPostings_out = "Ordered by docID's: ";
+        for (Tuple tup : posting_list){
+            getPostings_out += tup.doc_id + ", ";
+        }
+        System.out.println(getPostings_out);
+
+        Collections.sort(posting_list);
+        getPostings_out = "Ordered by TF: ";
+        for (Tuple tup : posting_list){
+            getPostings_out += tup.doc_id + ", ";
+        }
+        System.out.println(getPostings_out);
 
     }
 
@@ -92,7 +115,6 @@ public class runner {
         // all terms have been indexed
 
         get_top_k(index, k_num);
-        getPostings(index);
 
         // read sample input
         try{
@@ -103,7 +125,11 @@ public class runner {
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                index_term(index, line);
+                String[] query_terms = line.split(" ");
+                for (String term : query_terms){
+                    getPostings(index, term);
+                }
+
             }
 
         } catch (IOException e){
