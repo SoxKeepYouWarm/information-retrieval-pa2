@@ -9,3 +9,4 @@ public class Tuple{
         this.frequency = frequency;
     }
 }
+

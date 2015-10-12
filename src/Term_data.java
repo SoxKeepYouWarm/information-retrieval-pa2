@@ -2,11 +2,16 @@ import java.util.List;
 
 public class Term_data{
 
-    int frequency;
+    int list_size;
     List<Tuple> posting_list;
 
-    public Term_data(int frequency, List<Tuple> posting_list){
-        this.frequency = frequency;
+    public Term_data(int list_size, List<Tuple> posting_list){
+        this.list_size = list_size;
         this.posting_list = posting_list;
     }
+
+    public int get_Posting_List_size(){
+        return list_size;
+    }
+
 }
