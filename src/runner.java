@@ -87,6 +87,41 @@ public class runner {
     }
 
 
+    public static void termAtATimeAND(Map<String, Term_data> index, String[] query_terms){
+
+        if (query_terms.length != 0){
+            List<Tuple> result_list = index.get(query_terms[0]).getPosting_list();
+
+            for (int i = 1; i < query_terms.length; i++){
+                List<Tuple> comparator_list = index.get(query_terms[i]).getPosting_list();
+
+                int result_index = 0;
+                int comparator_index = 0;
+                boolean result_hasNext = result_index < result_list.size();
+                boolean comparator_hasNext = comparator_index < comparator_list.size();
+
+                while (result_hasNext && comparator_hasNext){
+                    if (result_list.get(result_index).doc_id < comparator_list.get(comparator_index).doc_id){
+
+                    } else{
+
+                    }
+                }
+
+            }
+        } else{
+            System.out.println("No results found");
+        }
+
+
+
+
+        for (String term : query_terms){
+            List<Tuple> term_list = index.get(term).getPosting_list();
+        }
+    }
+
+
     public static void main(String [] args){
 
         String index_fileName = args[0];
@@ -129,6 +164,15 @@ public class runner {
                 for (String term : query_terms){
                     getPostings(index, term);
                 }
+
+                // Term at a time AND
+
+
+                // Term at a time OR
+
+                // Doc at a time AND
+
+                // Doc at a time OR
 
             }
 
