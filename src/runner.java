@@ -89,22 +89,82 @@ public class runner {
 
     public static void termAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
+        List<Integer> resulting_docs = new ArrayList<>();
+
+        int target_score = query_terms.length;
+        Map<Integer, Integer> doc_scores = new HashMap<>();
+
+        for (String term : query_terms){
+            List<Tuple> doc_list = index.get(term).getPosting_list();
+
+            for (Tuple tup : doc_list){
+                if (doc_scores.containsKey(tup.doc_id)){
+                    int current_score = doc_scores.get(tup.doc_id);
+                    doc_scores.put(tup.doc_id, (current_score + 1));
+                } else {
+                    doc_scores.put(tup.doc_id, 1);
+                }
+            }
+        }
+
+        for (int key : doc_scores.keySet()){
+            if (doc_scores.get(key) == target_score){
+                resulting_docs.add(key);
+            }
+        }
+
+        int num_of_docs = resulting_docs.size();
+
+        String function_output = "FUNCTION: TermAtATimeAnd ";
+        for (String term : query_terms){
+            function_output += term + " ";
+        }
+        System.out.println(function_output);
+
+        function_output = "docID's: ";
+        for (int id : resulting_docs){
+            function_output += id + " ";
+        }
+        System.out.println(function_output);
+
+        System.out.println(num_of_docs + " documents are found");
+
+        /*
+        List<Tuple> return_list = new LinkedList<>();
+
         if (query_terms.length != 0){
-            List<Tuple> result_list = index.get(query_terms[0]).getPosting_list();
+            List<Tuple> merge_list = index.get(query_terms[0]).getPosting_list();
+
+
+            for (int i = 0; i < merge_list.size(); i++){
+                Tuple current_tup = merge_list.get(i);
+                boolean term_in_all_lists = true;
+
+                for (int j = 1; j < )
+            }
+
 
             for (int i = 1; i < query_terms.length; i++){
-                List<Tuple> comparator_list = index.get(query_terms[i]).getPosting_list();
+                List<Tuple> second_merge_list = index.get(query_terms[i]).getPosting_list();
 
-                int result_index = 0;
-                int comparator_index = 0;
-                boolean result_hasNext = result_index < result_list.size();
-                boolean comparator_hasNext = comparator_index < comparator_list.size();
+                int merge_list_index = 0;
+                int second_merge_list_index = 0;
+                boolean merge_list_hasNext = merge_list_index < merge_list.size();
+                boolean second_merge_list_hasNext = second_merge_list_index < second_merge_list.size();
 
-                while (result_hasNext && comparator_hasNext){
-                    if (result_list.get(result_index).doc_id < comparator_list.get(comparator_index).doc_id){
-
+                while (merge_list_hasNext && second_merge_list_hasNext){
+                    if (merge_list.get(merge_list_index).doc_id < second_merge_list.get(second_merge_list_index).doc_id){
+                        merge_list_index ++;
+                        merge_list_hasNext = merge_list_index < merge_list.size();
+                    } else if (merge_list.get(merge_list_index).doc_id > second_merge_list.get(second_merge_list_index).doc_id){
+                        second_merge_list_index ++;
+                        second_merge_list_hasNext = second_merge_list_index < second_merge_list.size();
                     } else{
-
+                        return_list.add(merge_list.get(merge_list_index));
+                        merge_list_index ++;
+                        second_merge_list_index ++;
+                        merge_list_hasNext = merge_list_index < merge_list.size();
+                        second_merge_list_hasNext = second_merge_list_index < second_merge_list.size();
                     }
                 }
 
@@ -119,6 +179,52 @@ public class runner {
         for (String term : query_terms){
             List<Tuple> term_list = index.get(term).getPosting_list();
         }
+
+        */
+    }
+
+
+    public static void termAtATimeOR(Map<String, Term_data> index, String[] query_terms) {
+
+        List<Integer> resulting_docs = new ArrayList<>();
+
+        int target_score = query_terms.length;
+        Map<Integer, Integer> doc_scores = new HashMap<>();
+
+        for (String term : query_terms) {
+            List<Tuple> doc_list = index.get(term).getPosting_list();
+
+            for (Tuple tup : doc_list) {
+                if (doc_scores.containsKey(tup.doc_id)) {
+                    // do nothing
+                } else {
+                    doc_scores.put(tup.doc_id, 1);
+                }
+            }
+        }
+
+
+        for (int key : doc_scores.keySet()) {
+            resulting_docs.add(key);
+        }
+
+
+        int num_of_docs = resulting_docs.size();
+
+        String function_output = "FUNCTION: TermAtATimeOr ";
+        for (String term : query_terms) {
+            function_output += term + " ";
+        }
+        System.out.println(function_output);
+
+        function_output = "docID's: ";
+        for (int id : resulting_docs) {
+            function_output += id + " ";
+        }
+        System.out.println(function_output);
+
+        System.out.println(num_of_docs + " documents are found");
+
     }
 
 
@@ -166,9 +272,10 @@ public class runner {
                 }
 
                 // Term at a time AND
-
+                termAtATimeAND(index, query_terms);
 
                 // Term at a time OR
+                termAtATimeOR(index, query_terms);
 
                 // Doc at a time AND
 
