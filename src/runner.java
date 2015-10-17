@@ -128,59 +128,6 @@ public class runner {
         System.out.println(function_output);
 
         System.out.println(num_of_docs + " documents are found");
-
-        /*
-        List<Tuple> return_list = new LinkedList<>();
-
-        if (query_terms.length != 0){
-            List<Tuple> merge_list = index.get(query_terms[0]).getPosting_list();
-
-
-            for (int i = 0; i < merge_list.size(); i++){
-                Tuple current_tup = merge_list.get(i);
-                boolean term_in_all_lists = true;
-
-                for (int j = 1; j < )
-            }
-
-
-            for (int i = 1; i < query_terms.length; i++){
-                List<Tuple> second_merge_list = index.get(query_terms[i]).getPosting_list();
-
-                int merge_list_index = 0;
-                int second_merge_list_index = 0;
-                boolean merge_list_hasNext = merge_list_index < merge_list.size();
-                boolean second_merge_list_hasNext = second_merge_list_index < second_merge_list.size();
-
-                while (merge_list_hasNext && second_merge_list_hasNext){
-                    if (merge_list.get(merge_list_index).doc_id < second_merge_list.get(second_merge_list_index).doc_id){
-                        merge_list_index ++;
-                        merge_list_hasNext = merge_list_index < merge_list.size();
-                    } else if (merge_list.get(merge_list_index).doc_id > second_merge_list.get(second_merge_list_index).doc_id){
-                        second_merge_list_index ++;
-                        second_merge_list_hasNext = second_merge_list_index < second_merge_list.size();
-                    } else{
-                        return_list.add(merge_list.get(merge_list_index));
-                        merge_list_index ++;
-                        second_merge_list_index ++;
-                        merge_list_hasNext = merge_list_index < merge_list.size();
-                        second_merge_list_hasNext = second_merge_list_index < second_merge_list.size();
-                    }
-                }
-
-            }
-        } else{
-            System.out.println("No results found");
-        }
-
-
-
-
-        for (String term : query_terms){
-            List<Tuple> term_list = index.get(term).getPosting_list();
-        }
-
-        */
     }
 
 
@@ -224,6 +171,88 @@ public class runner {
         System.out.println(function_output);
 
         System.out.println(num_of_docs + " documents are found");
+
+    }
+
+
+    private static boolean continue_scanning_helper(List<ListIterator<Tuple>> list_pointers){
+        boolean return_val = false;
+        for (ListIterator<Tuple> iter : list_pointers){
+            if (iter.hasNext()){ return_val = true; }
+        }
+        return return_val;
+    }
+
+    public static void docAtATimeAND(Map<String, Term_data> index, String[] query_terms){
+
+        class docAtATime_data implements Comparable<docAtATime_data>{
+
+            int index;
+            int docId;
+
+            public docAtATime_data(int index, int docId){
+                this.index = index;
+                this.docId = docId;
+            }
+
+            @Override
+            public int compareTo(docAtATime_data other_data) {
+                return other_data.docId - this.docId;
+            }
+        }
+
+        List<List<Tuple>> relevant_lists = new LinkedList<>();
+
+        for (String terms : query_terms){
+            if (index.containsKey(terms)){
+                relevant_lists.add(index.get(terms).getPosting_list());
+            } else {
+                System.out.println(terms + " not found");
+            }
+        }
+
+        Map<Integer, Integer> doc_scores = new HashMap<>();
+
+        List<ListIterator<Tuple>> list_pointers = new ArrayList<>(relevant_lists.size());
+
+        for (int i = 0; i < relevant_lists.size(); i++){
+            ListIterator<Tuple> iterator = relevant_lists.get(i).listIterator();
+            list_pointers.add(i, iterator);
+        }
+
+        while (continue_scanning_helper(list_pointers)){
+
+            List<docAtATime_data> current_postings = new LinkedList<>();
+            // build sortable index docId pairs
+            for (int i = 0; i < relevant_lists.size(); i++){
+                ListIterator<Tuple> current_iter = list_pointers.get(i);
+                Tuple current_tup = current_iter.next();
+                current_iter.previous();
+                docAtATime_data new_data = new docAtATime_data(i, current_tup.doc_id);
+                current_postings.add(new_data);
+            }
+
+            // sort the collection
+            Collections.sort(current_postings);
+
+            // get objects with lowest docId's
+
+
+            // if object list size equals target, add docId to results
+
+            // increment pointers of respective indexes
+        }
+
+        Map<Integer, Integer> sorting_indexes_to_ids = new HashMap<>();
+        for (int i = 0; i < list_pointers.size(); i++){
+            sorting_indexes_to_ids.put(i, list_pointers.get(i).next().doc_id);
+            list_pointers.get(i).previous();
+        }
+
+    }
+
+
+    public static void docAtATimeOR(Map<String, Term_data> index, String[] query_terms){
 
     }
 
@@ -278,6 +307,7 @@ public class runner {
                 termAtATimeOR(index, query_terms);
 
                 // Doc at a time AND
+                docAtATimeAND(index, query_terms);
 
                 // Doc at a time OR
 
