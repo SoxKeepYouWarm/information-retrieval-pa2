@@ -64,10 +64,6 @@ public class runner {
         System.out.println("FUNCTION: getPostings " + query_term);
 
         Term_data query_results = index.get(query_term);
-        if (query_results.get_Posting_List_size() == 0){
-            System.out.println("term not found");
-            return;
-        }
 
         List<Tuple> posting_list = query_results.getPosting_list();
 
@@ -102,14 +98,14 @@ public class runner {
         Map<Integer, Integer> doc_scores = new HashMap<>();
 
         for (String term : query_terms){
-            List<Tuple> doc_list = index.get(term).getPosting_list();
+            List<Tuple> posting_list = index.get(term).getPosting_list();
 
-            for (Tuple tup : doc_list){
-                if (doc_scores.containsKey(tup.doc_id)){
-                    int current_score = doc_scores.get(tup.doc_id);
-                    doc_scores.put(tup.doc_id, (current_score + 1));
+            for (Tuple posting : posting_list){
+                if (doc_scores.containsKey(posting.doc_id)){
+                    int current_score = doc_scores.get(posting.doc_id);
+                    doc_scores.put(posting.doc_id, (current_score + 1));
                 } else {
-                    doc_scores.put(tup.doc_id, 1);
+                    doc_scores.put(posting.doc_id, 1);
                 }
             }
         }
@@ -142,7 +138,6 @@ public class runner {
 
         List<Integer> resulting_docs = new ArrayList<>();
 
-        int target_score = query_terms.length;
         Map<Integer, Integer> doc_scores = new HashMap<>();
 
         for (String term : query_terms) {
@@ -157,11 +152,9 @@ public class runner {
             }
         }
 
-
         for (int key : doc_scores.keySet()) {
             resulting_docs.add(key);
         }
-
 
         int num_of_docs = resulting_docs.size();
 
@@ -452,7 +445,6 @@ public class runner {
         Map<String, Term_data> index = new HashMap<>();
 
         try{
-            //String file_name = "term.idx";
 
             FileReader reader = new FileReader(index_fileName);
             BufferedReader bufferedReader = new BufferedReader(reader);
@@ -481,21 +473,31 @@ public class runner {
 
             while ((line = bufferedReader.readLine()) != null) {
                 String[] query_terms = line.split(" ");
+                List<String> stripped_query_terms = new ArrayList<>(query_terms.length);
                 for (String term : query_terms){
-                    getPostings(index, term);
+                    //System.out.println("Current term is " + term);
+                    Term_data query_results = index.get(term);
+                    if (query_results == null){
+                        System.out.println(term + " not found");
+                    } else{
+                        getPostings(index, term);
+                        stripped_query_terms.add(term);
+                    }
                 }
 
+                String[] terms = stripped_query_terms.toArray(new String[stripped_query_terms.size()]);
+
                 // Term at a time AND
-                termAtATimeAND(index, query_terms);
+                termAtATimeAND(index, terms);
 
                 // Term at a time OR
-                termAtATimeOR(index, query_terms);
+                termAtATimeOR(index, terms);
 
                 // Doc at a time AND
-                docAtATimeAND(index, query_terms);
+                docAtATimeAND(index, terms);
 
                 // Doc at a time OR
-                docAtATimeOR(index, query_terms);
+                docAtATimeOR(index, terms);
             }
 
         } catch (IOException e){
