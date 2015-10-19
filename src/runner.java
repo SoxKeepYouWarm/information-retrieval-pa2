@@ -194,7 +194,7 @@ public class runner {
         return continue_search;
     }
 
-    public static void remove_finished_pointers(List<postingList_pointer> list_pointers){
+    public static boolean remove_finished_pointers(List<postingList_pointer> list_pointers){
         //List<Integer> pointers_to_remove = new ArrayList<>(list_pointers.size());
         List<postingList_pointer> remove_pointers = new LinkedList<>();
         for (int i = 0; i < list_pointers.size(); i++){
@@ -207,6 +207,12 @@ public class runner {
         for (postingList_pointer remove_pointer : remove_pointers){
             //list_pointers.remove(remove_index);
             list_pointers.remove(remove_pointer);
+        }
+
+        if (remove_pointers.size() != 0){
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -303,38 +309,136 @@ public class runner {
 
             }
 
-            remove_finished_pointers(postingList_pointers);
             doc_scores.put(temp_lowest_id, temp_current_num_of_pointers);
-
+            if (remove_finished_pointers(postingList_pointers)){
+                break;
+            }
         }
 
         String and_output = "FUNCTION: DocAtATimeQueryAnd ";
-        String or_output = "FUNCTION: DocAtATimeQueryOr ";
+        //String or_output = "FUNCTION: DocAtATimeQueryOr ";
         for (String term : query_terms){
             and_output += term + " ";
-            or_output += term + " ";
+            //or_output += term + " ";
         }
 
         String and_docList = "";
-        String or_docList = "";
+        //String or_docList = "";
 
+        int num_of_and_docs = 0;
+        //int num_of_or_docs = 0;
         for (int docId : doc_scores.keySet()){
             int score = doc_scores.get(docId);
             int query_length = query_terms.length;
             if (score == query_length){
                 and_docList += docId + " ";
+                num_of_and_docs ++;
             }
-            or_docList += docId + " ";
+            //or_docList += docId + " ";
+            //num_of_or_docs ++;
         }
 
         System.out.println(and_output + and_docList);
-        System.out.println(or_output + or_docList);
+        System.out.println(num_of_and_docs + " documents are found");
+        //System.out.println(or_output + or_docList);
+        //System.out.println(num_of_or_docs + " documents are found");
 
     }
 
 
     public static void docAtATimeOR(Map<String, Term_data> index, String[] query_terms){
+        Map<Integer, Integer> doc_scores = new HashMap<>();         // holds results
 
+        List<postingList_pointer> postingList_pointers = new LinkedList<>();        // #
+        //List<List<Tuple>> query_posting_lists = new LinkedList<>();
+
+        for (String terms : query_terms){           // initialize postingList pointers
+            if (index.containsKey(terms)){
+                postingList_pointer pointer = new postingList_pointer(index.get(terms).getPosting_list(), terms); // #
+                postingList_pointers.add(pointer);                                                          // #
+                //query_posting_lists.add(index.get(terms).getPosting_list());
+            } else {
+                System.out.println(terms + " not found");
+            }
+        }
+
+        while (continue_scanning_helper(postingList_pointers)){
+            //System.out.println("DEBUG: docscores is currently " + doc_scores.size());
+
+            Collections.sort(postingList_pointers);
+
+            // LOG CURRENT POINTERS
+            //System.out.println("POINTER STATUS");
+            //for (postingList_pointer pointer : postingList_pointers){
+            //    System.out.println(pointer.term + " " + pointer.get_current().doc_id);
+            //}
+
+
+
+            int temp_lowest_id = -1;
+            int temp_current_num_of_pointers = 0;
+            for (Iterator<postingList_pointer> postingList_iter = postingList_pointers.iterator(); postingList_iter.hasNext();){
+                postingList_pointer pointer = postingList_iter.next();
+
+                if (temp_lowest_id == -1){              // if lowest id hasn't been set yet
+                    temp_lowest_id = pointer.get_current().doc_id;
+
+                    // this is a lowest pointer
+                    temp_current_num_of_pointers ++;
+                    if (pointer.hasNext()){
+                        pointer.next();
+                    } else {
+                        postingList_iter.remove();
+                    }
+                } else {            // lowest id already set
+                    if (pointer.get_current().doc_id == temp_lowest_id){
+                        // this is another lowest pointer
+                        temp_current_num_of_pointers ++;
+                        if (pointer.hasNext()){
+                            pointer.next();
+                        } else {
+                            postingList_iter.remove();
+                        }
+                    } else {
+                        // this is not a lowest pointer
+                        break;
+                    }
+                }
+
+            }
+
+            remove_finished_pointers(postingList_pointers);
+            doc_scores.put(temp_lowest_id, temp_current_num_of_pointers);
+
+        }
+
+        //String and_output = "FUNCTION: DocAtATimeQueryAnd ";
+        String or_output = "FUNCTION: DocAtATimeQueryOr ";
+        for (String term : query_terms){
+            //and_output += term + " ";
+            or_output += term + " ";
+        }
+
+        //String and_docList = "";
+        String or_docList = "";
+
+        //int num_of_and_docs = 0;
+        int num_of_or_docs = 0;
+        for (int docId : doc_scores.keySet()){
+            int score = doc_scores.get(docId);
+            int query_length = query_terms.length;
+            if (score == query_length){
+                //and_docList += docId + " ";
+                //num_of_and_docs ++;
+            }
+            or_docList += docId + " ";
+            num_of_or_docs ++;
+        }
+
+        //System.out.println(and_output + and_docList);
+        //System.out.println(num_of_and_docs + " documents are found");
+        System.out.println(or_output + or_docList);
+        System.out.println(num_of_or_docs + " documents are found");
     }
 
 
@@ -391,7 +495,7 @@ public class runner {
                 docAtATimeAND(index, query_terms);
 
                 // Doc at a time OR
-
+                docAtATimeOR(index, query_terms);
             }
 
         } catch (IOException e){
