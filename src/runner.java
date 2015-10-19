@@ -77,9 +77,16 @@ public class runner {
         }
         System.out.println(getPostings_out);
 
-        Collections.sort(posting_list);
-        getPostings_out = "Ordered by TF: ";
+
+        List<Tuple> posting_list_copy = new LinkedList<>();
         for (Tuple tup : posting_list){
+            Tuple new_tup = new Tuple(tup.doc_id, tup.frequency);
+            posting_list_copy.add(new_tup);
+        }
+
+        Collections.sort(posting_list_copy);
+        getPostings_out = "Ordered by TF: ";
+        for (Tuple tup : posting_list_copy){
             getPostings_out += tup.doc_id + ", ";
         }
         System.out.println(getPostings_out);
@@ -175,79 +182,153 @@ public class runner {
     }
 
 
-    private static boolean continue_scanning_helper(List<ListIterator<Tuple>> list_pointers){
-        boolean return_val = false;
-        for (ListIterator<Tuple> iter : list_pointers){
-            if (iter.hasNext()){ return_val = true; }
+    private static boolean continue_scanning_helper(List<postingList_pointer> list_pointers){
+        boolean continue_search = false;
+
+        for (int i = 0; i < list_pointers.size(); i++){
+            if (list_pointers.get(i).hasNext()){
+                continue_search = true;
+            }
         }
-        return return_val;
+
+        return continue_search;
     }
+
+    public static void remove_finished_pointers(List<postingList_pointer> list_pointers){
+        //List<Integer> pointers_to_remove = new ArrayList<>(list_pointers.size());
+        List<postingList_pointer> remove_pointers = new LinkedList<>();
+        for (int i = 0; i < list_pointers.size(); i++){
+            if (! list_pointers.get(i).hasNext()){
+                remove_pointers.add(list_pointers.get(i));
+                //pointers_to_remove.add(i);
+            }
+        }
+
+        for (postingList_pointer remove_pointer : remove_pointers){
+            //list_pointers.remove(remove_index);
+            list_pointers.remove(remove_pointer);
+        }
+    }
+
+
+    static class postingList_pointer implements Comparable<postingList_pointer> {
+        List<Tuple> posting_list;
+        int index;
+        String term;
+
+        public postingList_pointer(List<Tuple> posting_list, String term){
+            this.posting_list = posting_list;
+            this.term = term;
+            index = 0;
+        }
+
+        public Tuple get_current(){
+            return posting_list.get(index);
+        }
+
+        public void next(){
+            index ++;
+        }
+
+        public boolean hasNext(){
+            return (index + 1) < posting_list.size();
+        }
+
+        @Override
+        public int compareTo(postingList_pointer other_pointer) {
+            return this.posting_list.get(index).doc_id - other_pointer.posting_list.get(other_pointer.index).doc_id;
+        }
+    }
+
 
     public static void docAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
-        class docAtATime_data implements Comparable<docAtATime_data>{
+        Map<Integer, Integer> doc_scores = new HashMap<>();         // holds results
 
-            int index;
-            int docId;
+        List<postingList_pointer> postingList_pointers = new LinkedList<>();        // #
+        //List<List<Tuple>> query_posting_lists = new LinkedList<>();
 
-            public docAtATime_data(int index, int docId){
-                this.index = index;
-                this.docId = docId;
-            }
-
-            @Override
-            public int compareTo(docAtATime_data other_data) {
-                return other_data.docId - this.docId;
-            }
-        }
-
-        List<List<Tuple>> relevant_lists = new LinkedList<>();
-
-        for (String terms : query_terms){
+        for (String terms : query_terms){           // initialize postingList pointers
             if (index.containsKey(terms)){
-                relevant_lists.add(index.get(terms).getPosting_list());
+                postingList_pointer pointer = new postingList_pointer(index.get(terms).getPosting_list(), terms); // #
+                postingList_pointers.add(pointer);                                                          // #
+                //query_posting_lists.add(index.get(terms).getPosting_list());
             } else {
                 System.out.println(terms + " not found");
             }
         }
 
-        Map<Integer, Integer> doc_scores = new HashMap<>();
+        while (continue_scanning_helper(postingList_pointers)){
+            //System.out.println("DEBUG: docscores is currently " + doc_scores.size());
 
-        List<ListIterator<Tuple>> list_pointers = new ArrayList<>(relevant_lists.size());
+            Collections.sort(postingList_pointers);
 
-        for (int i = 0; i < relevant_lists.size(); i++){
-            ListIterator<Tuple> iterator = relevant_lists.get(i).listIterator();
-            list_pointers.add(i, iterator);
-        }
+            // LOG CURRENT POINTERS
+            //System.out.println("POINTER STATUS");
+            //for (postingList_pointer pointer : postingList_pointers){
+            //    System.out.println(pointer.term + " " + pointer.get_current().doc_id);
+            //}
 
-        while (continue_scanning_helper(list_pointers)){
 
-            List<docAtATime_data> current_postings = new LinkedList<>();
-            // build sortable index docId pairs
-            for (int i = 0; i < relevant_lists.size(); i++){
-                ListIterator<Tuple> current_iter = list_pointers.get(i);
-                Tuple current_tup = current_iter.next();
-                current_iter.previous();
-                docAtATime_data new_data = new docAtATime_data(i, current_tup.doc_id);
-                current_postings.add(new_data);
+
+            int temp_lowest_id = -1;
+            int temp_current_num_of_pointers = 0;
+            for (Iterator<postingList_pointer> postingList_iter = postingList_pointers.iterator(); postingList_iter.hasNext();){
+                postingList_pointer pointer = postingList_iter.next();
+
+                if (temp_lowest_id == -1){              // if lowest id hasn't been set yet
+                    temp_lowest_id = pointer.get_current().doc_id;
+
+                    // this is a lowest pointer
+                    temp_current_num_of_pointers ++;
+                    if (pointer.hasNext()){
+                        pointer.next();
+                    } else {
+                        postingList_iter.remove();
+                    }
+                } else {            // lowest id already set
+                    if (pointer.get_current().doc_id == temp_lowest_id){
+                        // this is another lowest pointer
+                        temp_current_num_of_pointers ++;
+                        if (pointer.hasNext()){
+                            pointer.next();
+                        } else {
+                            postingList_iter.remove();
+                        }
+                    } else {
+                        // this is not a lowest pointer
+                        break;
+                    }
+                }
+
             }
 
-            // sort the collection
-            Collections.sort(current_postings);
+            remove_finished_pointers(postingList_pointers);
+            doc_scores.put(temp_lowest_id, temp_current_num_of_pointers);
 
-            // get objects with lowest docId's
-
-
-            // if object list size equals target, add docId to results
-
-            // increment pointers of respective indexes
         }
 
-        Map<Integer, Integer> sorting_indexes_to_ids = new HashMap<>();
-        for (int i = 0; i < list_pointers.size(); i++){
-            sorting_indexes_to_ids.put(i, list_pointers.get(i).next().doc_id);
-            list_pointers.get(i).previous();
+        String and_output = "FUNCTION: DocAtATimeQueryAnd ";
+        String or_output = "FUNCTION: DocAtATimeQueryOr ";
+        for (String term : query_terms){
+            and_output += term + " ";
+            or_output += term + " ";
         }
+
+        String and_docList = "";
+        String or_docList = "";
+
+        for (int docId : doc_scores.keySet()){
+            int score = doc_scores.get(docId);
+            int query_length = query_terms.length;
+            if (score == query_length){
+                and_docList += docId + " ";
+            }
+            or_docList += docId + " ";
+        }
+
+        System.out.println(and_output + and_docList);
+        System.out.println(or_output + or_docList);
 
     }
 
