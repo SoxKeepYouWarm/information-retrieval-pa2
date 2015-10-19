@@ -37,17 +37,17 @@ public class daat_functions {
 
 
     static class postingList_pointer implements Comparable<postingList_pointer> {
-        List<Tuple> posting_list;
+        List<Posting_data> posting_list;
         int index;
         String term;
 
-        public postingList_pointer(List<Tuple> posting_list, String term){
+        public postingList_pointer(List<Posting_data> posting_list, String term){
             this.posting_list = posting_list;
             this.term = term;
             index = 0;
         }
 
-        public Tuple get_current(){
+        public Posting_data get_current(){
             return posting_list.get(index);
         }
 

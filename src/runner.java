@@ -11,7 +11,7 @@ public class runner {
         String[] line_split = line.split("\\\\");
 
         Term_data term_data;
-        List<Tuple> posting_list = new LinkedList<>();
+        List<Posting_data> posting_list = new LinkedList<>();
 
         String term = line_split[0];
         int frequency = Integer.parseInt(line_split[1].substring(1));      // drops leading 'c'
@@ -19,7 +19,7 @@ public class runner {
         String[] posting_elements = line_split[2].substring(2, line_split[2].length() - 1).split(", ");
         for (String element : posting_elements){
             String[] element_split = element.split("/");
-            Tuple posting = new Tuple(Integer.parseInt(element_split[0]), Integer.parseInt(element_split[1]));
+            Posting_data posting = new Posting_data(Integer.parseInt(element_split[0]), Integer.parseInt(element_split[1]));
             posting_list.add(posting);
         }
 
@@ -31,16 +31,41 @@ public class runner {
 
     public static void get_top_k(Map<String, Term_data> index, int k){
 
+        class Top_K_Data implements Comparable<Top_K_Data>{
+
+            int posting_list_size;
+            String term;
+
+            public Top_K_Data(int posting_list_size, String term){
+                this.posting_list_size = posting_list_size;
+                this.term = term;
+            }
+
+            public int getPosting_list_size(){
+                return posting_list_size;
+            }
+
+            public String getTerm(){
+                return term;
+            }
+
+            @Override
+            public int compareTo(Top_K_Data other_data) {
+                return other_data.getPosting_list_size() - this.getPosting_list_size();
+            }
+        }
+
+
         Set<String> terms = index.keySet();
         Collection<Term_data> values = index.values();
 
-        List<Top_K_Tuple> sorted_list = new LinkedList<>();
+        List<Top_K_Data> sorted_list = new LinkedList<>();
 
         for (Map.Entry<String, Term_data> entry : index.entrySet()){
             int posting_list_size = entry.getValue().get_Posting_List_size();
             String term = entry.getKey();
 
-            Top_K_Tuple tup = new Top_K_Tuple(posting_list_size, term);
+            Top_K_Data tup = new Top_K_Data(posting_list_size, term);
             sorted_list.add(tup);
         }
 
@@ -64,24 +89,24 @@ public class runner {
 
         Term_data query_results = index.get(query_term);
 
-        List<Tuple> posting_list = query_results.getPosting_list();
+        List<Posting_data> posting_list = query_results.getPosting_list();
 
         String getPostings_out = "Ordered by docID's: ";
-        for (Tuple tup : posting_list){
+        for (Posting_data tup : posting_list){
             getPostings_out += tup.doc_id + ", ";
         }
         System.out.println(getPostings_out);
 
 
-        List<Tuple> posting_list_copy = new LinkedList<>();
-        for (Tuple tup : posting_list){
-            Tuple new_tup = new Tuple(tup.doc_id, tup.frequency);
+        List<Posting_data> posting_list_copy = new LinkedList<>();
+        for (Posting_data tup : posting_list){
+            Posting_data new_tup = new Posting_data(tup.doc_id, tup.frequency);
             posting_list_copy.add(new_tup);
         }
 
         Collections.sort(posting_list_copy);
         getPostings_out = "Ordered by TF: ";
-        for (Tuple tup : posting_list_copy){
+        for (Posting_data tup : posting_list_copy){
             getPostings_out += tup.doc_id + ", ";
         }
         System.out.println(getPostings_out);
