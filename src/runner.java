@@ -92,6 +92,7 @@ public class runner {
 
     public static void termAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
+        int comparisons = 0;
         List<Integer> resulting_docs = new ArrayList<>();
 
         int target_score = query_terms.length;
@@ -101,6 +102,8 @@ public class runner {
             List<Tuple> posting_list = index.get(term).getPosting_list();
 
             for (Tuple posting : posting_list){
+
+                comparisons ++;
                 if (doc_scores.containsKey(posting.doc_id)){
                     int current_score = doc_scores.get(posting.doc_id);
                     doc_scores.put(posting.doc_id, (current_score + 1));
@@ -111,6 +114,7 @@ public class runner {
         }
 
         for (int key : doc_scores.keySet()){
+            comparisons ++;
             if (doc_scores.get(key) == target_score){
                 resulting_docs.add(key);
             }
@@ -131,28 +135,33 @@ public class runner {
         System.out.println(function_output);
 
         System.out.println(num_of_docs + " documents are found");
+        System.out.println(comparisons + " comparisons are made");
     }
 
 
     public static void termAtATimeOR(Map<String, Term_data> index, String[] query_terms) {
 
+        int comparisons = 0;
         List<Integer> resulting_docs = new ArrayList<>();
 
         Map<Integer, Integer> doc_scores = new HashMap<>();
 
         for (String term : query_terms) {
-            List<Tuple> doc_list = index.get(term).getPosting_list();
+            List<Tuple> posting_list = index.get(term).getPosting_list();
 
-            for (Tuple tup : doc_list) {
-                if (doc_scores.containsKey(tup.doc_id)) {
+            for (Tuple posting : posting_list) {
+
+                comparisons ++;
+                if (doc_scores.containsKey(posting.doc_id)) {
                     // do nothing
                 } else {
-                    doc_scores.put(tup.doc_id, 1);
+                    doc_scores.put(posting.doc_id, 1);
                 }
             }
         }
 
         for (int key : doc_scores.keySet()) {
+            comparisons ++;
             resulting_docs.add(key);
         }
 
@@ -171,7 +180,7 @@ public class runner {
         System.out.println(function_output);
 
         System.out.println(num_of_docs + " documents are found");
-
+        System.out.println(comparisons + " comparisons are made");
     }
 
 
@@ -242,23 +251,23 @@ public class runner {
 
     public static void docAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
+        int comparisons = 0;
         Map<Integer, Integer> doc_scores = new HashMap<>();         // holds results
 
-        List<postingList_pointer> postingList_pointers = new LinkedList<>();        // #
-        //List<List<Tuple>> query_posting_lists = new LinkedList<>();
+        List<postingList_pointer> postingList_pointers = new LinkedList<>();
 
         for (String terms : query_terms){           // initialize postingList pointers
+
+            comparisons ++;
             if (index.containsKey(terms)){
-                postingList_pointer pointer = new postingList_pointer(index.get(terms).getPosting_list(), terms); // #
-                postingList_pointers.add(pointer);                                                          // #
-                //query_posting_lists.add(index.get(terms).getPosting_list());
+                postingList_pointer pointer = new postingList_pointer(index.get(terms).getPosting_list(), terms);
+                postingList_pointers.add(pointer);
             } else {
                 System.out.println(terms + " not found");
             }
         }
 
         while (continue_scanning_helper(postingList_pointers)){
-            //System.out.println("DEBUG: docscores is currently " + doc_scores.size());
 
             Collections.sort(postingList_pointers);
 
@@ -268,27 +277,29 @@ public class runner {
             //    System.out.println(pointer.term + " " + pointer.get_current().doc_id);
             //}
 
-
-
             int temp_lowest_id = -1;
             int temp_current_num_of_pointers = 0;
             for (Iterator<postingList_pointer> postingList_iter = postingList_pointers.iterator(); postingList_iter.hasNext();){
                 postingList_pointer pointer = postingList_iter.next();
 
+                comparisons ++;
                 if (temp_lowest_id == -1){              // if lowest id hasn't been set yet
                     temp_lowest_id = pointer.get_current().doc_id;
 
                     // this is a lowest pointer
                     temp_current_num_of_pointers ++;
+                    comparisons ++;
                     if (pointer.hasNext()){
                         pointer.next();
                     } else {
                         postingList_iter.remove();
                     }
                 } else {            // lowest id already set
+                    comparisons ++;
                     if (pointer.get_current().doc_id == temp_lowest_id){
                         // this is another lowest pointer
                         temp_current_num_of_pointers ++;
+                        comparisons ++;
                         if (pointer.hasNext()){
                             pointer.next();
                         } else {
@@ -309,17 +320,13 @@ public class runner {
         }
 
         String and_output = "FUNCTION: DocAtATimeQueryAnd ";
-        //String or_output = "FUNCTION: DocAtATimeQueryOr ";
         for (String term : query_terms){
             and_output += term + " ";
-            //or_output += term + " ";
         }
 
         String and_docList = "";
-        //String or_docList = "";
 
         int num_of_and_docs = 0;
-        //int num_of_or_docs = 0;
         for (int docId : doc_scores.keySet()){
             int score = doc_scores.get(docId);
             int query_length = query_terms.length;
@@ -327,36 +334,33 @@ public class runner {
                 and_docList += docId + " ";
                 num_of_and_docs ++;
             }
-            //or_docList += docId + " ";
-            //num_of_or_docs ++;
         }
 
         System.out.println(and_output + and_docList);
         System.out.println(num_of_and_docs + " documents are found");
-        //System.out.println(or_output + or_docList);
-        //System.out.println(num_of_or_docs + " documents are found");
-
+        System.out.println(comparisons + " comparisons are made");
     }
 
 
     public static void docAtATimeOR(Map<String, Term_data> index, String[] query_terms){
+
+        int comparisons = 0;
         Map<Integer, Integer> doc_scores = new HashMap<>();         // holds results
 
-        List<postingList_pointer> postingList_pointers = new LinkedList<>();        // #
-        //List<List<Tuple>> query_posting_lists = new LinkedList<>();
+        List<postingList_pointer> postingList_pointers = new LinkedList<>();
 
         for (String terms : query_terms){           // initialize postingList pointers
+
+            comparisons ++;
             if (index.containsKey(terms)){
-                postingList_pointer pointer = new postingList_pointer(index.get(terms).getPosting_list(), terms); // #
-                postingList_pointers.add(pointer);                                                          // #
-                //query_posting_lists.add(index.get(terms).getPosting_list());
+                postingList_pointer pointer = new postingList_pointer(index.get(terms).getPosting_list(), terms);
+                postingList_pointers.add(pointer);
             } else {
                 System.out.println(terms + " not found");
             }
         }
 
         while (continue_scanning_helper(postingList_pointers)){
-            //System.out.println("DEBUG: docscores is currently " + doc_scores.size());
 
             Collections.sort(postingList_pointers);
 
@@ -366,27 +370,29 @@ public class runner {
             //    System.out.println(pointer.term + " " + pointer.get_current().doc_id);
             //}
 
-
-
             int temp_lowest_id = -1;
             int temp_current_num_of_pointers = 0;
             for (Iterator<postingList_pointer> postingList_iter = postingList_pointers.iterator(); postingList_iter.hasNext();){
                 postingList_pointer pointer = postingList_iter.next();
 
+                comparisons ++;
                 if (temp_lowest_id == -1){              // if lowest id hasn't been set yet
                     temp_lowest_id = pointer.get_current().doc_id;
 
                     // this is a lowest pointer
                     temp_current_num_of_pointers ++;
+                    comparisons ++;
                     if (pointer.hasNext()){
                         pointer.next();
                     } else {
                         postingList_iter.remove();
                     }
                 } else {            // lowest id already set
+                    comparisons ++;
                     if (pointer.get_current().doc_id == temp_lowest_id){
                         // this is another lowest pointer
                         temp_current_num_of_pointers ++;
+                        comparisons ++;
                         if (pointer.hasNext()){
                             pointer.next();
                         } else {
@@ -405,33 +411,22 @@ public class runner {
 
         }
 
-        //String and_output = "FUNCTION: DocAtATimeQueryAnd ";
         String or_output = "FUNCTION: DocAtATimeQueryOr ";
         for (String term : query_terms){
-            //and_output += term + " ";
             or_output += term + " ";
         }
 
-        //String and_docList = "";
         String or_docList = "";
 
-        //int num_of_and_docs = 0;
         int num_of_or_docs = 0;
         for (int docId : doc_scores.keySet()){
-            int score = doc_scores.get(docId);
-            int query_length = query_terms.length;
-            if (score == query_length){
-                //and_docList += docId + " ";
-                //num_of_and_docs ++;
-            }
             or_docList += docId + " ";
             num_of_or_docs ++;
         }
 
-        //System.out.println(and_output + and_docList);
-        //System.out.println(num_of_and_docs + " documents are found");
         System.out.println(or_output + or_docList);
         System.out.println(num_of_or_docs + " documents are found");
+        System.out.println(comparisons + " comparisons are made");
     }
 
 
@@ -488,16 +483,29 @@ public class runner {
                 String[] terms = stripped_query_terms.toArray(new String[stripped_query_terms.size()]);
 
                 // Term at a time AND
+                long start = System.nanoTime();
                 termAtATimeAND(index, terms);
+                long elapsedTime = System.nanoTime() - start;
+                System.out.println(elapsedTime + " nano seconds are used");
 
                 // Term at a time OR
+                start = System.nanoTime();
                 termAtATimeOR(index, terms);
+                elapsedTime = System.nanoTime() - start;
+                System.out.println(elapsedTime + " nano seconds are used");
 
                 // Doc at a time AND
+                start = System.nanoTime();
                 docAtATimeAND(index, terms);
+                elapsedTime = System.nanoTime() - start;
+                System.out.println(elapsedTime + " nano seconds are used");
 
                 // Doc at a time OR
+                start = System.nanoTime();
                 docAtATimeOR(index, terms);
+                elapsedTime = System.nanoTime() - start;
+                System.out.println(elapsedTime + " nano seconds are used");
+
             }
 
         } catch (IOException e){
