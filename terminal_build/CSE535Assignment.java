@@ -5,10 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class runner {
 
@@ -173,6 +169,9 @@ public class runner {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] query_terms = line.split(" ");
                 List<String> stripped_query_terms = new ArrayList<>(query_terms.length);
+
+                List<String[]> postings_returnList = new ArrayList<>();
+
                 for (String term : query_terms){
                     //System.out.println("Current term is " + term);
                     Term_data query_results = index.get(term);
@@ -180,6 +179,7 @@ public class runner {
                         System.out.println(term + " not found");
                     } else{
                         String[] postings_return = getPostings(index, term);
+                        postings_returnList.add(postings_return);
 
                         stripped_query_terms.add(term);
                     }
@@ -187,12 +187,24 @@ public class runner {
 
                 String[] terms = stripped_query_terms.toArray(new String[stripped_query_terms.size()]);
 
+                for (String message : top_k_return){
+                    //log.log(Level.ALL, message);
+                    message += "\n";
+                    Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
+                }
+
+                for (String[] postings : postings_returnList){
+                    for (String message : postings){
+                        message += "\n";
+                        Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
+                    }
+                }
+
                 // Term at a time AND
                 long start = System.nanoTime();
                 String[] taat_and_return = taat_functions.termAtATimeAND(index, terms);
                 long elapsedTime = System.nanoTime() - start;
                 for (String message : taat_and_return){
-                    //log.log(Level.ALL, message);
                     message += "\n";
                     Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
                 }
@@ -203,7 +215,6 @@ public class runner {
                 String[] taat_or_return = taat_functions.termAtATimeOR(index, terms);
                 elapsedTime = System.nanoTime() - start;
                 for (String message : taat_or_return){
-                    //log.log(Level.ALL, message);
                     message += "\n";
                     Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
                 }
@@ -214,7 +225,6 @@ public class runner {
                 String[] daat_and_return = daat_functions.docAtATimeAND(index, terms);
                 elapsedTime = System.nanoTime() - start;
                 for (String message : daat_and_return){
-                    //log.log(Level.ALL, message);
                     message += "\n";
                     Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
                 }
@@ -225,7 +235,6 @@ public class runner {
                 String[] daat_or_return = daat_functions.docAtATimeOR(index, terms);
                 elapsedTime = System.nanoTime() - start;
                 for (String message : daat_or_return){
-                    //log.log(Level.ALL, message)
                     message += "\n";
                     Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
                 }
