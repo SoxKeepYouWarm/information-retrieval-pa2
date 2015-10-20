@@ -7,7 +7,7 @@ public class daat_functions {
         boolean continue_search = false;
 
         for (int i = 0; i < list_pointers.size(); i++){
-            if (list_pointers.get(i).hasNext()){
+            if (list_pointers.get(i).get_current() != null){
                 continue_search = true;
             }
         }
@@ -19,9 +19,17 @@ public class daat_functions {
         //List<Integer> pointers_to_remove = new ArrayList<>(list_pointers.size());
         List<postingList_pointer> remove_pointers = new LinkedList<>();
         for (int i = 0; i < list_pointers.size(); i++){
-            if (! list_pointers.get(i).hasNext()){
+
+            try {
+                if (list_pointers.get(i).get_current() == null) {
+                    remove_pointers.add(list_pointers.get(i));
+                }
+            } catch (IndexOutOfBoundsException err){
                 remove_pointers.add(list_pointers.get(i));
             }
+            //if (! list_pointers.get(i).hasNext()){
+            //    remove_pointers.add(list_pointers.get(i));
+            //}
         }
 
         for (postingList_pointer remove_pointer : remove_pointers){
@@ -69,7 +77,7 @@ public class daat_functions {
     public static void docAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
         int comparisons = 0;
-        Map<Integer, Integer> doc_scores = new HashMap<>();         // holds results
+        List<Posting_data> doc_results = new LinkedList<>();
 
         List<postingList_pointer> postingList_pointers = new LinkedList<>();
 
@@ -89,12 +97,6 @@ public class daat_functions {
 
             Collections.sort(postingList_pointers);
 
-            // LOG CURRENT POINTERS
-            //System.out.println("POINTER STATUS");
-            //for (postingList_pointer pointer : postingList_pointers){
-            //    System.out.println(pointer.term + " " + pointer.get_current().doc_id);
-            //}
-
             int temp_lowest_id = -1;
             int temp_current_num_of_pointers = 0;
             for (Iterator<postingList_pointer> postingList_iter = postingList_pointers.iterator(); postingList_iter.hasNext();){
@@ -131,7 +133,8 @@ public class daat_functions {
 
             }
 
-            doc_scores.put(temp_lowest_id, temp_current_num_of_pointers);
+            Posting_data data = new Posting_data(temp_lowest_id, temp_current_num_of_pointers);
+            doc_results.add(data);
             if (remove_finished_pointers(postingList_pointers)){
                 break;
             }
@@ -142,21 +145,19 @@ public class daat_functions {
             and_output += term + " ";
         }
 
-        String and_docList = "";
+        String test_docList = "";
 
-        int num_of_and_docs = 0;
-        for (int docId : doc_scores.keySet()){
-            int score = doc_scores.get(docId);
-            int query_length = query_terms.length;
-            if (score == query_length){
-                and_docList += docId + " ";
-                num_of_and_docs ++;
+        int doc_result_num = 0;
+        for (Posting_data data : doc_results){
+            if (data.frequency == query_terms.length){
+                test_docList += data.doc_id + " ";
+                doc_result_num ++;
             }
         }
 
         System.out.println(and_output);
-        System.out.println("docID's: " + and_docList);
-        System.out.println(num_of_and_docs + " documents are found");
+        System.out.println("docID's: " + test_docList);
+        System.out.println(doc_result_num + " documents are found");
         System.out.println(comparisons + " comparisons are made");
     }
 
@@ -164,7 +165,7 @@ public class daat_functions {
     public static void docAtATimeOR(Map<String, Term_data> index, String[] query_terms){
 
         int comparisons = 0;
-        Map<Integer, Integer> doc_scores = new HashMap<>();         // holds results
+        List<Posting_data> doc_results = new LinkedList<>();
 
         List<postingList_pointer> postingList_pointers = new LinkedList<>();
 
@@ -180,14 +181,9 @@ public class daat_functions {
         }
 
         while (continue_scanning_helper(postingList_pointers)){
+            comparisons += postingList_pointers.size();
 
             Collections.sort(postingList_pointers);
-
-            // LOG CURRENT POINTERS
-            //System.out.println("POINTER STATUS");
-            //for (postingList_pointer pointer : postingList_pointers){
-            //    System.out.println(pointer.term + " " + pointer.get_current().doc_id);
-            //}
 
             int temp_lowest_id = -1;
             int temp_current_num_of_pointers = 0;
@@ -225,27 +221,28 @@ public class daat_functions {
 
             }
 
+            Posting_data data = new Posting_data(temp_lowest_id, temp_current_num_of_pointers);
+            doc_results.add(data);
             remove_finished_pointers(postingList_pointers);
-            doc_scores.put(temp_lowest_id, temp_current_num_of_pointers);
 
         }
 
-        String or_output = "FUNCTION: DocAtATimeQueryOr ";
+        String and_output = "FUNCTION: DocAtATimeQueryOr ";
         for (String term : query_terms){
-            or_output += term + " ";
+            and_output += term + " ";
         }
 
-        String or_docList = "";
+        String test_docList = "";
 
-        int num_of_or_docs = 0;
-        for (int docId : doc_scores.keySet()){
-            or_docList += docId + " ";
-            num_of_or_docs ++;
+        int doc_result_num = 0;
+        for (Posting_data data : doc_results){
+            test_docList += data.doc_id + " ";
+            doc_result_num ++;
         }
 
-        System.out.println(or_output);
-        System.out.println("docID's: " + or_docList);
-        System.out.println(num_of_or_docs + " documents are found");
+        System.out.println(and_output);
+        System.out.println("docID's: " + test_docList);
+        System.out.println(doc_result_num + " documents are found");
         System.out.println(comparisons + " comparisons are made");
     }
 

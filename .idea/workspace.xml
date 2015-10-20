@@ -2,12 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2778e0d-709b-44e6-b232-cbcdced5f73b" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\David Towson\IdeaProjects\reuters_index_builder\src\Top_K_Tuple.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\David Towson\IdeaProjects\reuters_index_builder\src\Tuple.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Term_data.java" afterPath="$PROJECT_DIR$/src/Term_data.java" />
+      <change type="MODIFICATION" beforePath="C:\Users\David Towson\IdeaProjects\reuters_index_builder\out\production\reuters_index_builder\daat_functions$postingList_pointer.class" afterPath="C:\Users\David Towson\IdeaProjects\reuters_index_builder\out\production\reuters_index_builder\daat_functions$postingList_pointer.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\David Towson\IdeaProjects\reuters_index_builder\out\production\reuters_index_builder\daat_functions.class" afterPath="C:\Users\David Towson\IdeaProjects\reuters_index_builder\out\production\reuters_index_builder\daat_functions.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions$1Intermediate_Results.class" afterPath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions$1Intermediate_Results.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions$2Intermediate_Results.class" afterPath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions$2Intermediate_Results.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions$2comparison_wrapper.class" afterPath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions$2comparison_wrapper.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions.class" afterPath="$PROJECT_DIR$/out/production/reuters_index_builder/taat_functions.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/daat_functions.java" afterPath="$PROJECT_DIR$/src/daat_functions.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/runner.java" afterPath="$PROJECT_DIR$/src/runner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/taat_functions.java" afterPath="$PROJECT_DIR$/src/taat_functions.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="reuters_index_builder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,11 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="taat_functions.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="taat_functions.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/taat_functions.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.05592105">
-              <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="169" column="76" selection-start-line="169" selection-start-column="76" selection-end-line="169" selection-end-column="76" />
               <folding>
                 <element signature="e#247#248#0" expanded="true" />
                 <element signature="e#299#300#0" expanded="true" />
@@ -80,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/sample_input.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+              <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -113,6 +115,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="daat_functions.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/daat_functions.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.45756456">
+              <caret line="187" column="36" selection-start-line="187" selection-start-column="36" selection-end-line="187" selection-end-column="36" />
+              <folding>
+                <element signature="e#1802#1803#0" expanded="true" />
+                <element signature="e#1856#1857#0" expanded="true" />
+                <element signature="e#1952#1953#0" expanded="true" />
+                <element signature="e#2016#2017#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="runner.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/runner.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -121,16 +138,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="daat_functions.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/daat_functions.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -159,14 +166,14 @@
         <option value="$PROJECT_DIR$/src/Term_Data_Comparator.java" />
         <option value="$PROJECT_DIR$/src/New_Tuple.java" />
         <option value="$PROJECT_DIR$/src/Top_K.java" />
-        <option value="$PROJECT_DIR$/sample_input.txt" />
-        <option value="$PROJECT_DIR$/src/daat_functions.java" />
         <option value="$PROJECT_DIR$/src/Top_K_Tuple.java" />
         <option value="$PROJECT_DIR$/src/Term_data.java" />
         <option value="$PROJECT_DIR$/src/Tuple.java" />
         <option value="$PROJECT_DIR$/src/runner.java" />
         <option value="$PROJECT_DIR$/src/Posting_data.java" />
         <option value="$PROJECT_DIR$/src/taat_functions.java" />
+        <option value="$PROJECT_DIR$/sample_input.txt" />
+        <option value="$PROJECT_DIR$/src/daat_functions.java" />
       </list>
     </option>
   </component>
@@ -554,12 +561,12 @@
       <workItem from="1444593842570" duration="14998000" />
       <workItem from="1444673356822" duration="4584000" />
       <workItem from="1444932019817" duration="2896000" />
-      <workItem from="1444968984208" duration="65341000" />
+      <workItem from="1444968984208" duration="73917000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100137000" />
+    <option name="totallyTimeSpent" value="108713000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -569,20 +576,20 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39809927" sideWeight="0.503125" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3284055" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39809927" sideWeight="0.503125" order="11" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284055" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39809927" sideWeight="0.496875" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39809927" sideWeight="0.496875" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -611,11 +618,24 @@
           <properties />
           <option name="timeStamp" value="55" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/daat_functions.java</url>
+          <line>138</line>
+          <properties />
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="doc_results.size() == 2196" language="JAVA" custom="" />
+          <url>file://$PROJECT_DIR$/src/daat_functions.java</url>
+          <line>183</line>
+          <properties />
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="67" />
+      <option name="time" value="71" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -856,14 +876,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/daat_functions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sample_output.log">
       <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
         <state />
@@ -871,14 +883,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.862069">
           <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/term.idx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2960.724">
-          <caret line="21437" column="94" selection-start-line="21437" selection-start-column="94" selection-end-line="21437" selection-end-column="94" />
           <folding />
         </state>
       </provider>
@@ -895,16 +899,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/runner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="52" column="54" selection-start-line="52" selection-start-column="54" selection-end-line="52" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Posting_data.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -916,18 +910,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/runner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="52" column="54" selection-start-line="52" selection-start-column="54" selection-end-line="52" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/term.idx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2960.724">
+          <caret line="21437" column="94" selection-start-line="21437" selection-start-column="94" selection-end-line="21437" selection-end-column="94" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sample_input.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/taat_functions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.05592105">
-          <caret line="46" column="48" selection-start-line="46" selection-start-column="48" selection-end-line="46" selection-end-column="48" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="169" column="76" selection-start-line="169" selection-start-column="76" selection-end-line="169" selection-end-column="76" />
           <folding>
             <element signature="e#247#248#0" expanded="true" />
             <element signature="e#299#300#0" expanded="true" />
@@ -941,6 +953,19 @@
             <element signature="e#3780#3781#0" expanded="true" />
             <element signature="e#3999#4000#0" expanded="true" />
             <element signature="e#4077#4078#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/daat_functions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45756456">
+          <caret line="187" column="36" selection-start-line="187" selection-start-column="36" selection-end-line="187" selection-end-column="36" />
+          <folding>
+            <element signature="e#1802#1803#0" expanded="true" />
+            <element signature="e#1856#1857#0" expanded="true" />
+            <element signature="e#1952#1953#0" expanded="true" />
+            <element signature="e#2016#2017#0" expanded="true" />
           </folding>
         </state>
       </provider>
