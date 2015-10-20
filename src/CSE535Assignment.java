@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -186,6 +187,11 @@ public class CSE535Assignment {
                 }
 
                 String[] terms = stripped_query_terms.toArray(new String[stripped_query_terms.size()]);
+
+                File yourFile = new File(log_fileName);
+                if(!yourFile.exists()) {
+                    yourFile.createNewFile();
+                }
 
                 for (String message : top_k_return){
                     //log.log(Level.ALL, message);
