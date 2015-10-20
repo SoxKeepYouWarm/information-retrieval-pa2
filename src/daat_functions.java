@@ -74,7 +74,7 @@ public class daat_functions {
     }
 
 
-    public static void docAtATimeAND(Map<String, Term_data> index, String[] query_terms){
+    public static String[] docAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
         int comparisons = 0;
         List<Posting_data> doc_results = new LinkedList<>();
@@ -159,10 +159,18 @@ public class daat_functions {
         System.out.println("docID's: " + test_docList);
         System.out.println(doc_result_num + " documents are found");
         System.out.println(comparisons + " comparisons are made");
+
+        String[] return_messages = new String[4];
+        return_messages[0] = and_output;
+        return_messages[1] = "docID's: " + test_docList;
+        return_messages[2] = doc_result_num + " documents are found";
+        return_messages[3] = comparisons + " comparisons are made";
+
+        return return_messages;
     }
 
 
-    public static void docAtATimeOR(Map<String, Term_data> index, String[] query_terms){
+    public static String[] docAtATimeOR(Map<String, Term_data> index, String[] query_terms){
 
         int comparisons = 0;
         List<Posting_data> doc_results = new LinkedList<>();
@@ -227,9 +235,9 @@ public class daat_functions {
 
         }
 
-        String and_output = "FUNCTION: DocAtATimeQueryOr ";
+        String or_output = "FUNCTION: DocAtATimeQueryOr ";
         for (String term : query_terms){
-            and_output += term + " ";
+            or_output += term + " ";
         }
 
         String test_docList = "";
@@ -240,10 +248,19 @@ public class daat_functions {
             doc_result_num ++;
         }
 
-        System.out.println(and_output);
+        System.out.println(or_output);
         System.out.println("docID's: " + test_docList);
         System.out.println(doc_result_num + " documents are found");
         System.out.println(comparisons + " comparisons are made");
+
+        String[] return_messages = new String[4];
+        return_messages[0] = or_output;
+        return_messages[1] = "docID's: " + test_docList;
+        return_messages[2] = doc_result_num + " documents are found";
+        return_messages[3] = comparisons + " comparisons are made";
+
+        return return_messages;
+
     }
 
 

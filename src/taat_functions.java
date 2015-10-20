@@ -3,7 +3,7 @@ import java.util.*;
 public class taat_functions {
 
 
-    public static void termAtATimeAND(Map<String, Term_data> index, String[] query_terms){
+    public static String[] termAtATimeAND(Map<String, Term_data> index, String[] query_terms){
 
         class comparison_wrapper{
             int comparisons;
@@ -86,18 +86,26 @@ public class taat_functions {
         }
         System.out.println(function_output);
 
-        function_output = "docID's: ";
+        String function_output_two = "docID's: ";
         for (int id : test_resulting_docs){
-            function_output += id + " ";
+            function_output_two += id + " ";
         }
-        System.out.println(function_output);
+        System.out.println(function_output_two);
 
         System.out.println(num_of_docs + " documents are found");
         System.out.println(comparison_wrapper.comparisons + " comparisons are made");
+
+        String[] return_messages = new String[4];
+        return_messages[0] = function_output;
+        return_messages[1] = function_output_two;
+        return_messages[2] = num_of_docs + " documents are found";
+        return_messages[3] = comparison_wrapper.comparisons + " comparisons are made";
+
+        return return_messages;
     }
 
 
-    public static void termAtATimeOR(Map<String, Term_data> index, String[] query_terms) {
+    public static String[] termAtATimeOR(Map<String, Term_data> index, String[] query_terms) {
 
         class comparison_wrapper{
             int comparisons;
@@ -179,14 +187,22 @@ public class taat_functions {
         }
         System.out.println(function_output);
 
-        function_output = "docID's: ";
+        String function_output_two = "docID's: ";
         for (int id : test_resulting_docs){
-            function_output += id + " ";
+            function_output_two += id + " ";
         }
-        System.out.println(function_output);
+        System.out.println(function_output_two);
 
         System.out.println(num_of_docs + " documents are found");
         System.out.println(comparison_wrapper.comparisons + " comparisons are made");
+
+        String[] return_messages = new String[4];
+        return_messages[0] = function_output;
+        return_messages[1] = function_output_two;
+        return_messages[2] = num_of_docs + " documents are found";
+        return_messages[3] = comparison_wrapper.comparisons + " comparisons are made";
+
+        return return_messages;
     }
 
 

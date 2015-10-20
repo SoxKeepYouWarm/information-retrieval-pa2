@@ -1,7 +1,14 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class runner {
 
@@ -29,7 +36,7 @@ public class runner {
     }
 
 
-    public static void get_top_k(Map<String, Term_data> index, int k){
+    public static String[] get_top_k(Map<String, Term_data> index, int k){
 
         class Top_K_Data implements Comparable<Top_K_Data>{
 
@@ -81,9 +88,15 @@ public class runner {
         System.out.println("FUNCTION: getTopK " + k);
         System.out.println(output);
 
+        String[] return_message = new String[2];
+        return_message[0] = "FUNCTION: getTopK " + k;
+        return_message[1] = output;
+
+        return return_message;
+
     }
 
-    public static void getPostings(Map<String, Term_data> index, String query_term){
+    public static String[] getPostings(Map<String, Term_data> index, String query_term){
 
         System.out.println("FUNCTION: getPostings " + query_term);
 
@@ -110,6 +123,13 @@ public class runner {
             getPostings_out += tup.doc_id + ", ";
         }
         System.out.println(getPostings_out);
+
+        String[] return_messages = new String[3];
+        return_messages[0] = "FUNCTION: getPostings " + query_term;
+        return_messages[1] = getPostings_out;
+        return_messages[2] = getPostings_out;
+
+        return return_messages;
 
     }
 
@@ -140,7 +160,7 @@ public class runner {
 
         // all terms have been indexed
 
-        get_top_k(index, k_num);
+        String[] top_k_return = get_top_k(index, k_num);
 
         // read sample input
         try{
@@ -159,7 +179,8 @@ public class runner {
                     if (query_results == null){
                         System.out.println(term + " not found");
                     } else{
-                        getPostings(index, term);
+                        String[] postings_return = getPostings(index, term);
+
                         stripped_query_terms.add(term);
                     }
                 }
@@ -168,26 +189,46 @@ public class runner {
 
                 // Term at a time AND
                 long start = System.nanoTime();
-                taat_functions.termAtATimeAND(index, terms);
+                String[] taat_and_return = taat_functions.termAtATimeAND(index, terms);
                 long elapsedTime = System.nanoTime() - start;
+                for (String message : taat_and_return){
+                    //log.log(Level.ALL, message);
+                    message += "\n";
+                    Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
+                }
                 System.out.println(elapsedTime + " nano seconds are used");
 
                 // Term at a time OR
                 start = System.nanoTime();
-                taat_functions.termAtATimeOR(index, terms);
+                String[] taat_or_return = taat_functions.termAtATimeOR(index, terms);
                 elapsedTime = System.nanoTime() - start;
+                for (String message : taat_or_return){
+                    //log.log(Level.ALL, message);
+                    message += "\n";
+                    Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
+                }
                 System.out.println(elapsedTime + " nano seconds are used");
 
                 // Doc at a time AND
                 start = System.nanoTime();
-                daat_functions.docAtATimeAND(index, terms);
+                String[] daat_and_return = daat_functions.docAtATimeAND(index, terms);
                 elapsedTime = System.nanoTime() - start;
+                for (String message : daat_and_return){
+                    //log.log(Level.ALL, message);
+                    message += "\n";
+                    Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
+                }
                 System.out.println(elapsedTime + " nano seconds are used");
 
                 // Doc at a time OR
                 start = System.nanoTime();
-                daat_functions.docAtATimeOR(index, terms);
+                String[] daat_or_return = daat_functions.docAtATimeOR(index, terms);
                 elapsedTime = System.nanoTime() - start;
+                for (String message : daat_or_return){
+                    //log.log(Level.ALL, message)
+                    message += "\n";
+                    Files.write(Paths.get(log_fileName), message.getBytes(), StandardOpenOption.APPEND);
+                }
                 System.out.println(elapsedTime + " nano seconds are used");
 
             }
